@@ -14,3 +14,9 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
 ```
+
+## Caveats
+
+This simple script doesn't handle due dates because apparently converting dates from Excel to Python is a nightmare.
+
+I've also chosen default values for priority and indent, obviously adjust as you see fit, and if anyone cares to make this smarter, that would be fantastic!
