@@ -6,6 +6,21 @@ import csv
 import datetime
 
 
+def get_json_or_die(args):
+
+    try:
+        rtm_json_file = open(args.rtm_json)
+        return json.load(rtm_json_file)
+    except JSONDecodeError as jse:
+        print(f"Invalid JSON specified! {jse}")
+        exit()
+
+
+def get_open_tasks(rtm_json_blob):
+    tasks = rtm_json_blob['tasks']
+    return [t for t in tasks if 'date_completed' not in t]
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -18,16 +33,9 @@ def parse_args():
 if __name__ == "__main__":
     args = parse_args()
 
-try:
-    rtm_json_file = open(args.rtm_json)
-    rtm_json = json.load(rtm_json_file)
-except JSONDecodeError as jse:
-    print(f"Invalid JSON specified! {jse}")
-    exit()
+rtm_json = get_json_or_die(args)
 
-tasks = rtm_json['tasks']
-
-open_tasks = [t for t in tasks if 'date_completed' not in t]
+open_tasks = get_open_tasks(rtm_json)
 
 with open(args.csv_result, 'w', newline='') as csv_result:
     rtm_writer = csv.writer(csv_result)
